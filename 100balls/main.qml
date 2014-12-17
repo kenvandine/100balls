@@ -4,7 +4,7 @@
  * This file is part of 100balls.
  *
  * 100balls is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by 
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; version 3.
  *
  * 100balls is distributed in the hope that it will be useful,
@@ -25,13 +25,18 @@ import "js/game.js" as Game
 
 Game {
     id: game
+    anchors.centerIn: parent
+
     height: units.gu(68)
     width: units.gu(44)
 
     gameName: "com.ubuntu.developer.rpadovani.100balls"
 
     // Version of the game
-    property real version: 0.3
+    property var version: "0.3.2"
+    // Becomes true when the user press anywhere (but pause) and leaves the
+    // balls fall
+    property bool isDoorOpen: false
     // Becomes true when the game is in pause. Needs because when scene.running
     // is false all objects are destroyed, not if this is true
     property bool pause: false
@@ -96,7 +101,9 @@ Game {
     GameScene {
         id: gameScene
         anchors.fill: parent
+
         running: false
+
         Ball { id: ball }
         Glass { id: glass }
     }
@@ -123,3 +130,4 @@ Game {
         fillMode: Image.Tile
     }
 }
+
