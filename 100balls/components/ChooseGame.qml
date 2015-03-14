@@ -23,25 +23,6 @@ import Bacon2D 1.0
 import "../js/game.js" as Game
 
 Scene {
-    AbstractButton {
-        height: units.gu(4)
-        width: units.gu(4)
-
-        anchors {
-            left: parent.left;
-            bottom: parent.bottom;
-            margins: units.gu(0.2);
-        }
-
-        onClicked: {
-            game.currentScene = mainMenu;
-        }
-
-        Image {
-            anchors.fill: parent
-            source: Qt.resolvedUrl("../img/back.svg")
-        }
-    }
 
     ColumnLayout {
         width: parent.width
@@ -49,6 +30,7 @@ Scene {
         AboutText {
             text: "100Balls"
             font.pixelSize: units.gu(10)
+            font.bold: true
         }
         AboutText {
             text: version
@@ -57,11 +39,9 @@ Scene {
 
         Spacer {}
 
-        Button {
+        MenuItem {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n.tr("Arcade")
-
-            color: UbuntuColors.orange
 
             onClicked: {
                 game.gameType = 'arcade';
@@ -71,11 +51,9 @@ Scene {
 
         Spacer {}
 
-        Button {
+        MenuItem {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n.tr("Perfection")
-
-            color: UbuntuColors.orange
 
             onClicked: {
                 game.gameType = 'perfection';
@@ -85,11 +63,9 @@ Scene {
 
         Spacer {}
 
-        Button {
+        MenuItem {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n.tr("Time challenge")
-
-            color: UbuntuColors.orange
 
             onClicked: {
                 game.gameType = 'time';

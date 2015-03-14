@@ -24,26 +24,6 @@ import Bacon2D 1.0
 Scene {
     id: root
 
-    AbstractButton {
-        height: units.gu(4)
-        width: units.gu(4)
-
-        anchors {
-            left: parent.left;
-            bottom: parent.bottom;
-            margins: units.gu(0.2);
-        }
-
-        onClicked: {
-            game.currentScene = mainMenu;
-        }
-
-        Image {
-            anchors.fill: parent
-            source: Qt.resolvedUrl("../img/back.svg")
-        }
-    }
-
     ColumnLayout {
         id: columnLayout
         width: parent.width

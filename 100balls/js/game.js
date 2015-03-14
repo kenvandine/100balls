@@ -32,7 +32,7 @@ function newGame() {
         }
     }
     game.pushScene(gameScene);
-    gameScene.running = true;
+    game.gameState = Bacon2D.Running;
     launchGlass();
 }
 
@@ -42,7 +42,7 @@ function restartGame() {
 }
 
 function endGame() {
-    gameScene.running = false;
+    game.gameState = Bacon2D.Paused;
     pause = false;
     game.currentScene = endMenu;
     endMenu.score = score;

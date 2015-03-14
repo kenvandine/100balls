@@ -26,7 +26,6 @@ import "../js/game.js" as Game
 Scene {
     gravity: Qt.point(0, 15)
     physics: true
-    running: false
     clip: true
     // Becomes true when the user press anywhere (but pause) and leaves the
     // balls fall
@@ -38,7 +37,7 @@ Scene {
         interval: 1000
 
         onTriggered: remTime--;
-        running: gameType === 'time' && gameScene.running
+        running: gameType === 'time' && gameState === Bacon2D.Running
         repeat: true
     }
 
@@ -101,31 +100,68 @@ Scene {
         horizontalAlignment: Text.AlignHCenter
     }
 
-    Column {
-        anchors.centerIn: parent
-        width: parent.width
-
-        Label {
-            id: levelText
-
-            fontSize: "large"
-            color: "white"
-            width: parent.width
-            horizontalAlignment: Text.AlignHCenter
-            font.weight: Font.Bold
-
-            text: "level " + level
+    Image {
+        id: scoreView
+        anchors {
+            right: parent.right
+            rightMargin: units.gu(2)
         }
 
-        Label {
-            id: scoreText
+        y: parent.y + parent.height / 3
+        source: "../img/grey_panel.png"
+        height: scoreColumn.height + units.gu(4)
+        width: parent.width / 3
 
-            fontSize: "large"
-            color: "white"
-            width: parent.width
-            horizontalAlignment: Text.AlignHCenter
+        Column {
+            id: scoreColumn
+            anchors {
+                left: parent.left
+                right: parent.right
+                margins: units.gu(2)
+                verticalCenter: scoreView.verticalCenter
+            }
+            height: childrenRect.height
+            spacing: units.gu(1)
 
-            text: score + " points"
+            Label {
+                id: levelText
+                fontSize: "large"
+                width: parent.width
+                height: units.gu(4)
+                horizontalAlignment: Text.AlignHCenter
+                font.weight: Font.Bold
+                text: "level: " + level
+            }
+
+            Label {
+                id: scoreText
+                fontSize: "large"
+                width: parent.width
+                height: units.gu(4)
+                horizontalAlignment: Text.AlignHCenter
+                text: "score: " + score
+            }
+
+            Label {
+                id: recordText
+                fontSize: "large"
+                font.weight: Font.Bold
+                width: parent.width
+                height: visible ? units.gu(4) : 0
+                horizontalAlignment: Text.AlignHCenter
+                property int gameHighScore: {
+                    if (gameType === 'arcade')
+                        return highScore;
+                    else if (gameType === 'perfection')
+                        return perfectionScore;
+                    else if (gameType === 'time')
+                        return timeScore;
+                    else
+                        return 0;
+                }
+                text: "record: " + gameHighScore
+                visible: gameHighScore > 0
+            }
         }
     }
 
@@ -173,71 +209,53 @@ Scene {
         anchors.fill: parent
     }
 
-    AbstractButton {
-        width: units.gu(4)
-        height: units.gu(4)
+    Rectangle {
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            bottom: pauseButton.top
+        }
+        opacity: pause ? 0.8 : 0
+        color: "black"
+        z: parent.z + 1
+    }
 
-        anchors { left: parent.left; bottom: parent.bottom; margins: units.gu(2) }
-
+    MenuIcon {
+        id: pauseButton
+        anchors { left: parent.left; bottom: parent.bottom; }
+        source: pause ? "../img/play.png" : "../img/pause.png"
         onClicked: {
             // Don't change this order!
             // The pause is set before scene is stopped, because
             // otherwise all objects are destructed
-            pause = true
-            gameScene.running = false
-            PopupUtils.open(pauseDialog)
-        }
-
-        Image {
-            anchors.fill: parent
-            source: Qt.resolvedUrl("../img/pause.png")
+            pause = (game.gameState !== Bacon2D.Paused) ? true : false
+            game.gameState = pause ? Bacon2D.Paused : Bacon2D.Running
         }
     }
 
-    Component {
-        id: pauseDialog
-        Dialog {
-            id: dialog
-            z: 10
-            title: i18n.tr("Pause")
-            text: i18n.tr("If you quit the game the highscore will be saved anyway")
+    MenuIcon {
+        id: exitButton
+        anchors { right: parent.right; bottom: parent.bottom; }
+        source: "../img/exit.png"
+        onClicked: {
+            // We need to restart the game, so functions
+            // can destroy all objects when the game ends
+            pause = false;
+            game.gameState = Bacon2D.Running
+            Game.endGame();
+        }
+    }
 
-            Button {
-                text: i18n.tr("Continue game")
-                onClicked: {
-                    // Don't change this order, see below!
-                    PopupUtils.close(dialog)
-                    gameScene.running = true;
-                    pause = false;
-                }
-                color: UbuntuColors.orange
-            }
-
-            Button {
-                text: i18n.tr("Restart game")
-                onClicked: {
-                    // Don't change this order, see below!
-                    PopupUtils.close(dialog)
-
-                    pause = false;
-                    gameScene.running = true;
-
-                    Game.restartGame();
-                }
-                color: UbuntuColors.orange
-            }
-
-            Button {
-                text: i18n.tr("Exit game")
-                onClicked: {
-                    PopupUtils.close(dialog)
-                    // We need to restart the game, so functions
-                    // can destroy all objects when the game ends
-                    pause = false;
-                    gameScene.running = true
-                    Game.endGame();
-                }
-            }
+    MenuIcon {
+        anchors { right: exitButton.left; bottom: parent.bottom; }
+        visible: pause
+        source: "../img/return.png"
+        onClicked: {
+            // Don't change this order, see below!
+            pause = false;
+            game.gameState = Bacon2D.Running;
+            Game.restartGame();
         }
     }
 }

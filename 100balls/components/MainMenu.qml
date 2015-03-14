@@ -28,7 +28,9 @@ Scene {
         AboutText {
             text: "100Balls"
             font.pixelSize: units.gu(10)
+            font.bold: true
         }
+
         AboutText {
             text: version
             font.pixelSize: units.gu(2)
@@ -36,11 +38,9 @@ Scene {
 
         Spacer {}
 
-        Button {
+        MenuItem {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: i18n.tr("Start game!")
-
-            color: UbuntuColors.orange
+            text: i18n.tr("Choose game")
 
             onClicked: {
                 game.currentScene = chooseGame;
@@ -49,11 +49,9 @@ Scene {
 
         Spacer {}
 
-        Button {
+        MenuItem {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n.tr("Tutorial")
-
-            color: UbuntuColors.orange
 
             onClicked: {
                 game.currentScene = tutorial;
@@ -62,15 +60,13 @@ Scene {
 
         Spacer {}
 
-        Button {
+        MenuItem {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n.tr("About")
 
-            color: UbuntuColors.orange
-
             onClicked: {
                 game.currentScene = about;
-                about.running = true;
+                game.gameState = Bacon2D.Running;
             }
         }
 

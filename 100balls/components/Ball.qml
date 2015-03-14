@@ -61,7 +61,7 @@ Component {
         Connections {
             target: gameScene
             onRunningChanged: {
-                if (!pause && !running) {
+                if (!pause && gameState !== Bacon2D.Running) {
                     // At the end of the game, destroy all!
                     ballEntity.destroy();
                 }

@@ -11,12 +11,21 @@
         <file>components/GameScene.qml</file>
         <file>components/Glass.qml</file>
         <file>components/MainMenu.qml</file>
+        <file>components/MenuBar.qml</file>
+        <file>components/MenuIcon.qml</file>
+        <file>components/MenuItem.qml</file>
         <file>components/Spacer.qml</file>
         <file>components/Tutorial.qml</file>
-        <file>img/back.svg</file>
-        <file>img/background.png</file>
         <file>img/pause.png</file>
         <file>img/pig-128.png</file>
+        <file>img/information.png</file>
+        <file>img/question.png</file>
+        <file>img/menuList.png</file>
+        <file>img/red_button02.png</file>
+        <file>img/grey_panel.png</file>
         <file>js/game.js</file>
+        <file>img/exit.png</file>
+        <file>img/play.png</file>
+        <file>img/return.png</file>
     </qresource>
 </RCC>

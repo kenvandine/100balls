@@ -32,24 +32,26 @@ Game {
     gameName: "com.ubuntu.developer.rpadovani.100balls"
 
     // Version of the game
-    property var version: "0.4"
+    property string version: "0.5"
     // Becomes true when the user press anywhere (but pause) and leaves the
     // balls fall
     property bool isDoorOpen: false
-    // Becomes true when the game is in pause. Needs because when scene.running
-    // is false all objects are destroyed, not if this is true
+    // Becomes true when the game is in pause. Needs because when gameState
+    // is paused all objects are destroyed, not if this is true
     property bool pause: false
     // Total number of balls in game
     property int numberOfBalls: 100
     // Score of this game
     property int score: 0
+    property alias highScore: settings.highScore
+    property alias perfectionScore: settings.perfectionScore
+    property alias timeScore: settings.timeScore
     // Actual level
     property int level: 1
     // How many points a ball does when falls in a glass
     property int glassScore: 1
     // Speed of glasses
     property real velocity: units.gu(0.3)
-    property alias running: gameScene.running
     // Type of game we want to play
     property var gameType
     // Time before the end of the game in time challenge mode
@@ -74,22 +76,17 @@ Game {
     }
 
     onLevelChanged: {
-        // At evey level the speed of glass goes up
+        // At every level the speed of glass goes up
         velocity += 0.3;
     }
 
-    currentScene: mainMenu
+    currentScene: chooseGame
 
     Settings {
         id: settings
         property int highScore: 0; // Arcade score
         property int perfectionScore: 0;
         property int timeScore: 0;
-    }
-
-    MainMenu {
-        id: mainMenu
-        anchors.fill: parent
     }
 
     About {
@@ -100,8 +97,6 @@ Game {
     GameScene {
         id: gameScene
         anchors.fill: parent
-
-        running: false
 
         Ball { id: ball }
         Glass { id: glass }
@@ -122,11 +117,28 @@ Game {
         anchors.fill: parent
     }
 
-    Image {
-        z: -10
-        source: Qt.resolvedUrl("img/background.png")
+    Rectangle {
         anchors.fill: parent
-        fillMode: Image.Tile
+        color: "black"
+        z: -10
+
+        Rectangle {
+            anchors.fill: parent
+            gradient: UbuntuColors.greyGradient
+            opacity: 0.3
+        }
+    }
+
+    MenuBar {
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+        game: game
+        height: childrenRect.height
+        visible: game.currentScene !== gameScene
+        opacity: 1
     }
 }
 

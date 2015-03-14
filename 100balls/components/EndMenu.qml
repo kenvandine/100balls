@@ -30,6 +30,7 @@ Scene {
         AboutText {
             text: i18n.tr("Game over!")
             font.pixelSize: units.gu(8)
+            font.bold: true
         }
 
         Spacer {}
@@ -52,14 +53,12 @@ Scene {
 
         Spacer {}
 
-        Button {
+        MenuItem {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: i18n.tr("Go to main menu")
-
-            color: UbuntuColors.orange
+            text: i18n.tr("Menu")
 
             onClicked: {
-                game.currentScene = mainMenu;
+                game.currentScene = chooseGame;
             }
         }
     }
